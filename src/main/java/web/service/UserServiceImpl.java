@@ -1,46 +1,56 @@
 package web.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import web.repository.UserDAO;
 import web.entity.User;
-//import javax.validation.Valid;
+import web.repository.UserRepository;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserDAO userDAO;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userDAO.getAllUsers();
+    @Transactional
+    public void createUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 
     @Override
-    public Object getUserById(long id) {
-        return userDAO.getUserById(id);
+    public List<User> getAllUser() {
+        return userRepository.findAll();
     }
 
     @Override
-    public void addUser(User user) {
-        userDAO.addUser(user);
+    public User getUserById(long id) {
+        return userRepository.getById(id);
+    }
+
+
+    @Override
+    @Transactional
+    public void updateUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
     }
 
     @Override
-    public void removeUser(long id) {
-        userDAO.removeUser(id);
+    @Transactional
+    public void delete(long id) {
+        userRepository.deleteById(id);
     }
 
-    @Override
-    public void updateUser( User user) {
-        userDAO.updateUser(user);
-    }
+
 }
