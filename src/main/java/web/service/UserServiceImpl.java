@@ -3,15 +3,19 @@ package web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import web.entity.Role;
 import web.entity.User;
+import web.repository.RoleDao;
 import web.repository.UserRepository;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    private RoleDao roleDao;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -50,6 +54,21 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void delete(long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public Set<Role> getAllRoles() {
+        return roleDao.getAllRoles();
+    }
+
+    @Override
+    public Role getRoleByName(String name) {
+        return roleDao.getRoleByName(name);
+    }
+
+    @Override
+    public Set<Role> getRolesByNames(String[] names) {
+        return roleDao.getRolesByNames(names);
     }
 
 

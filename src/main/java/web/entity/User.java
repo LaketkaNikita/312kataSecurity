@@ -1,7 +1,9 @@
+
 package web.entity;
 
 import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -9,6 +11,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="users")
@@ -36,19 +39,19 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(long id, String name, String lastname, int age, Set<Role> roles, String email, String password) {
+    public User(long id, String name, String lastname, int age, String email, String password, Set<Role> roleSet) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.age = age;
-        this.roles = roles;
-        this.password = password;
         this.email = email;
+        this.password = password;
+        this.roles = roleSet;
     }
 
     public Long getId() {
@@ -105,17 +108,25 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public Set<Role> getRoleSet() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRoleSet(Set<Role> roleSet) {
+        this.roles = roleSet;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+        return roles;
+    }
+    @Transient
+    public String getStringRoles() {
+        return this.getRoleSet()
+                .stream()
+                .map(r -> r.getAuthority())
+                .map(s -> s.substring(s.indexOf('_') + 1))
+                .collect(Collectors.joining(" "));
     }
 
     @Override
@@ -147,7 +158,8 @@ public class User implements UserDetails {
                 ", age=" + age +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", roles=" + roles +
+                ", roleSet=" + roles +
                 '}';
     }
+
 }
