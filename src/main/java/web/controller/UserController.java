@@ -14,7 +14,7 @@ public class UserController {
 
     @GetMapping()
     public String getUser(@AuthenticationPrincipal User user, Model model) {
-        model.addAttribute("roles", user.getRoleSet());
+        model.addAttribute("roles", user.getRoles());
         model.addAttribute("user", user);
         return "user";
     }

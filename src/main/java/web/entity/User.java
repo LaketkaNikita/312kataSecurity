@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -108,12 +108,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Set<Role> getRoleSet() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoleSet(Set<Role> roleSet) {
-        this.roles = roleSet;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class User implements UserDetails {
     }
     @Transient
     public String getStringRoles() {
-        return this.getRoleSet()
+        return this.getRoles()
                 .stream()
                 .map(r -> r.getAuthority())
                 .map(s -> s.substring(s.indexOf('_') + 1))
