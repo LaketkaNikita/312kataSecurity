@@ -18,7 +18,7 @@
 <div class="container-fluid badge-dark p-3">
     <p class="d-inline"><strong th:text="${user.getEmail()}"></strong></p>
     <p class="d-inline"><strong th:text="${user.getStringRoles()}"></strong></p>
-    <a href="/logout" class="float-right text-muted table-hover-color-red mr-2 fs-1" role="button" aria-pressed="false">
+    <a href="/logout" class="btn btn-dark float-right table-hover-color-red mr-2 fs-1" role="button" aria-pressed="false">
         Logout
     </a>
 </div>
@@ -161,13 +161,10 @@
                                                                     </div>
                                                                     <!— placeholder="name@example.com"-->
                                                                     <div class="form-group text-center">
-                                                                        <label class="center-block">
-                                                                            <span class="font-weight-bold">Password</span>
-                                                                        </label>
-                                                                        <input type="text"
-                                                                               class="form-control collection-ville text-center"
-                                                                               th:value="${user.password}"
-                                                                               th:name="password"/>
+                                                                        <label for="passwordModalField"><strong>Password</strong></label>
+                                                                        <input name="password" type="password"
+                                                                               class="form-control "
+                                                                               id="passwordModalField"/>
                                                                     </div>
 
                                                                     <div class="form-group text-center">
@@ -317,15 +314,65 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        <!--                        Edit user-->
-                        <div class="card tab-pane fade background-color-div-gray" id="newUserBtn" role="tabpanel"
-                             aria-labelledby="newUserBtn">
-                            <div class="w-100 border-bottom">
-                                <b><h5 class="my-2 ml-3">Add new user</h5></b>
+                            <!--                        Edit user-->
+                            <div class="card tab-pane fade background-color-div-gray" id="newUserBtn" role="tabpanel"
+                                 aria-labelledby="newUserBtn" >
+                                <div class="w-100 border-bottom">
+                                    <b><h5 class="my-2 ml-3">Add new user</h5></b>
+<!--                                    New User-->
+                                    <div class="modal-body">
+                                        <form th:method="POST" th:action="@{/admin/new}" >
+                                            <div class="form-group text-center">
+                                                <label for="firstNameField"><strong>First name</strong></label>
+                                                <input name="name" type="text" class="form-control" id="firstNameField"
+                                                       placeholder="First name"/>
+                                            </div>
+                                            <div class="form-group text-center">
+                                                <label for="lastNameField"><strong>Last name</strong></label>
+                                                <input name="lastName" type="text" class="form-control"
+                                                       id="lastNameField"
+                                                       placeholder="Last name"/>
+                                            </div>
+                                            <div class="form-group text-center">
+                                                <label for="ageField"><strong>Age</strong></label>
+                                                <input name="age" type="number" class="form-control" id="ageField"
+                                                       placeholder="Age"/>
+                                            </div>
+                                            <div class="form-group text-center">
+                                                <label for="emailField"><strong>Email</strong></label>
+                                                <input name="email" type="email" class="form-control" id="emailField"
+                                                       placeholder="Email"/>
+                                            </div>
+                                            <!— placeholder="name@example.com"-->
+                                            <div class="form-group text-center">
+                                                <label for="passwordField"><strong>Password</strong></label>
+                                                <input name="password" type="password" class="form-control"
+                                                       id="passwordField"
+                                                       placeholder="Password"/>
+                                            </div>
+
+                                            <div class="form-group text-center">
+                                                <label for="roleForm"><strong>Role</strong></label>
+                                                <select multiple class="custom-select" id="roleForm"
+                                                        th:size="${roles.size()}" th:name="roles">
+                                                    <th:block th:each="role : ${roles}">
+                                                        <option th:value="${role.id}" th:text="${role.role}"></option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button class="btn btn-success" type="submit">
+                                                    Add new user
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!--                                    New User-->
+                                </div>
                             </div>
+                            <!--                        Edit user-->
                         </div>
-                        <!--                        Edit user-->
                     </div>
                 </div>
             </div>
