@@ -8,13 +8,13 @@ import web.entity.Role;
 import web.entity.User;
 import web.repository.RoleDao;
 import web.repository.UserRepository;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private RoleDao roleDao;
