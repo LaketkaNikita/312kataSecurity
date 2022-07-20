@@ -1,6 +1,6 @@
 package web.entity;
 
-import org.apache.commons.lang3.StringUtils;
+
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
